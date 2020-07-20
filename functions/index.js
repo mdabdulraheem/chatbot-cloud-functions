@@ -1,4 +1,5 @@
 const functions = require('firebase-functions');
+const { WebhookClient } = require('dialogflow-fulfillment');
 const cors = require('cors')({origin: true});
 const admin = require('firebase-admin');
 const serviceAccount = require('./covid-info-chatbot-rmgmxb-firebase-adminsdk-zwvzi-6012c50cb3.json');
@@ -12,12 +13,6 @@ const dialogflow = require('@google-cloud/dialogflow');
 
 
 exports.dialogflowGateway = functions.https.onRequest( (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', '*');
-  res.set('Access-Control-Allow-Headers', 'Content-Type');
-
-
-  // res.set('Access-Control-Allow-Credentials', 'true');
     cors(req, res, async () => {
         console.log("Req",req.body, typeof(req.body));
         const { sessionId, text } = req.body;
@@ -42,8 +37,6 @@ exports.dialogflowGateway = functions.https.onRequest( (req, res) => {
     })
 });
 
-
-const { WebhookClient } = require('dialogflow-fulfillment');
 
 exports.dialogflowWebhook = functions.https.onRequest(async (request, response) => {
     const agent = new WebhookClient({ request, response });
